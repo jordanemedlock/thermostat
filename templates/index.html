@@ -1,18 +1,67 @@
 <html>
 <head>
-<title>Thermostat</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script
+	src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="/static/index.css">
+
+
+	<title>Corlock Thermostat</title>
 </head>
 <body>
-	<h1>The amazing Corlock Thermostat!</h1>
-	<ul>
-		<li>Temperature: {{page.temp}}</li>
-		<li>Humidity: {{page.hum}}</li>
-		<li>Heater on: {{page.heater_on}}</li>
-		<li>AC on: {{page.ac_on}}</li>
-		<li><a href='/heat/on'>Heater on</a></li>
-		<li><a href='/heat/off'>Heater off</a></li>
-		<li><a href='/ac/on'>AC on</a></li>
-		<li><a href='/ac/off'>AC off</a></li>
-	</ul>
+	<div class="container">
+		<div class="py-5 text-center"><!-- 
+			<img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+			<img class="d-block mx-auto mb-4" src="https://img.icons8.com/nolan/96/temperature-sensitive.png">
+			<h1>Corlock Thermostat</h1>
+		</div>
+		<ul class="list-group">
+			<li class="list-group-item">Set Temperature: {{page.set_temp}}&deg;F</li>
+			<li class="list-group-item">Temperature: {{page.temp}}&deg;F</li>
+			<li class="list-group-item">Humidity: {{page.hum}}%</li>
+			<li class="list-group-item">Heater: 
+				<span class="badge {{ 'badge-danger' if page.heater_on else 'badge-secondary' }}">
+					{{ 'on' if page.heater_on else 'off' }}
+				</span>
+			</li>
+			<li class="list-group-item">AC:
+				<span class="badge {{ 'badge-info' if page.ac_on else 'badge-secondary' }}">
+					{{ 'on' if page.ac_on else 'off' }}
+				</span>
+			</li>
+			<li class="list-group-item">Heater Mode: 
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn btn-info active">
+						<input type="radio" name="heater" id="heater-off" checked> Off
+					</label>
+					<label class="btn btn-info">
+						<input type="radio" name="heater" id="heater-on"> On
+					</label>
+					<label class="btn btn-info">
+						<input type="radio" name="heater" id="heater-auto"> Auto
+					</label>
+				</div>
+			</li>
+			<li class="list-group-item">AC Mode: 
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn btn-info active">
+						<input type="radio" name="ac" id="ac-off" checked> Off
+					</label>
+					<label class="btn btn-info">
+						<input type="radio" name="ac" id="ac-on"> On
+					</label>
+					<label class="btn btn-info">
+						<input type="radio" name="ac" id="ac-auto"> Auto
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

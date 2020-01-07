@@ -1,61 +1,28 @@
-from flask import Flask, render_template
-import RPi.GPIO as GPIO
-import board 
-import adafruit_dht
+from flask import Flask, render_template, g
+from .models import Heater, AC, Thermometer, TempRange, Thermostat
 
 app = Flask(__name__)
 
-GPIO.setmode(GPIO.BCM)
+heater = Heater(2)
+ac = AC(3)
+thermometer = Thermometer(14)
+temp_range = TempRange(65, 67, 78, 80)
 
-heater = 2
-ac = 3
-something_else = 4
-another_thing = 17
-heater_on = False
-ac_on = False
+g.thermostat = Thermostat(heater, ac, thermometer, temp_range, Thermostat.AUTO)
 
-thermometer = adafruit_dht.DHT11(board.D14)
-
-channels = [heater, ac, something_else, another_thing]
-
-GPIO.setup(channels, GPIO.OUT)
-GPIO.output(channels, GPIO.HIGH)
-
-
-@app.route('/heat/on')
-def heat_on():
-  heater_on = True
-  GPIO.output(heater, GPIO.LOW)
-  return "Turning up the heat!"
-  
-@app.route('/heat/off')
-def heat_off():
-  heater_on = False
-  GPIO.output(heater, GPIO.HIGH)
-  return "Turning off the heat!"
-  
-@app.route('/ac/on')
-def ac_on():
-  ac_on = True
-  GPIO.output(ac, GPIO.LOW)
-  return "Turning up the cool!"
-  
-@app.route('/ac/off')
-def ac_off():
-  ac_on = False
-  GPIO.output(ac, GPIO.HIGH)
-  return "Turning off the cool!"
 
 @app.route('/')
 def index():
+  global set_temp, heater_mode, ac_is_on
   page = {
-    'temp': thermometer.temperature,
-	'hum': thermometer.humidity,
-	'heater_on': heater_on,
-	'ac_on': ac_on
+    'temp': to_f(thermometer.temperature),
+    'set_temp': to_f(set_temp),
+    'hum': thermometer.humidity,
+    'heater_on': heater_mode,
+    'ac_on': ac_is_on
   }
   return render_template('index.html', page=page)
   
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', debug=True)
