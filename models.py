@@ -70,13 +70,26 @@ class Thermostat(object):
 		if self.mode != self.AUTO:
 			return None
 
-		if self.thermometer.fahrenheit < self.temp_range.lowest:
-			print('temp too low turning up the heat {} < {}'.format(self.thermometer.fahrenheit, self.temp_range.lowest))
+		f = None
+		seconds = 0
+		while not f and seconds < 5:
+			try:
+				f = thermometer.fahrenheit
+			except RuntimeError as e:
+				time.sleep(1)
+				seconds += 1
+		if not f:
+			raise e
+
+
+		if f < self.temp_range.lowest:
+			print('temp too low turning up the heat {} < {}'.format(f, self.temp_range.lowest))
 			self.heat()
-		elif self.temp_range.lower < self.thermometer.fahrenheit < self.temp_range.upper:
+		elif self.temp_range.lower < f < self.temp_range.upper:
+			print('leaving it there')
 			self.off()
-		elif self.temp_range.uppest < self.thermometer.fahrenheit:
-			print('temp too high turning up the ac {} > {}'.format(self.thermometer.fahrenheit, self.temp_range.uppest))
+		elif self.temp_range.uppest < f:
+			print('temp too high turning up the ac {} > {}'.format(f, self.temp_range.uppest))
 			self.cool()
 
 	@property
