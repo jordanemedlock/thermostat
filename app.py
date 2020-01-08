@@ -1,5 +1,4 @@
 from flask import Flask, render_template, g, request
-from models import Heater, AC, Thermometer, TempRange, Thermostat
 import os
 import json
 
@@ -25,20 +24,10 @@ def checked_filter(value, target):
   return bool_change_filter(value==target, 'checked', '')
 
 def load_thermostat():
-  try: 
-    with open('thermostat.json', 'r') as fp:
-      obj = json.load(fp)
+  with open('thermostat.json', 'r') as fp:
+    return json.load(fp)
 
-    return Thermostat.from_json(obj)
-  except:
-    heater = Heater(2)
-    ac = AC(3)
-    thermometer = Thermometer(14)
-    temp_range = TempRange(65, 67, 78, 80)
-    return Thermostat(heater, ac, thermometer, temp_range, Thermostat.AUTO)
-
-def save_thermostat(thermostat):
-  obj = thermostat.to_json()
+def save_thermostat(obj):
   with open('thermostat.json', 'w') as fp:
     json.dump(obj, fp)
 
@@ -47,13 +36,11 @@ def index():
   thermostat = load_thermostat()
   if request.method == 'POST':
     print(request.form)
-    mode = request.form.get('mode')
-    thermostat.temp_range.lowest = int(request.form.get('lowest'))
-    thermostat.temp_range.lower = int(request.form.get('lower'))
-    thermostat.temp_range.upper = int(request.form.get('upper'))
-    thermostat.temp_range.uppest = int(request.form.get('uppest'))
-    if mode:
-      thermostat.set_mode(mode)
+    thermostat['mode'] = request.form.get('mode') or thermostat['mode']
+    thermostat['temp_range'][0] = int(request.form.get('lowest'))
+    thermostat['temp_range'][1] = int(request.form.get('lower'))
+    thermostat['temp_range'][2] = int(request.form.get('upper'))
+    thermostat['temp_range'][3] = int(request.form.get('uppest'))
     save_thermostat(thermostat)
   return render_template('index.html', thermostat=thermostat)
 

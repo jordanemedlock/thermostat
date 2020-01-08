@@ -62,7 +62,8 @@ class Thermometer(DHT11):
 
 	def to_json(self):
 		return {
-			'channel': self.channel
+			'channel': self.channel,
+			'temperature': self.fahrenheit
 		}
 
 	@classmethod
@@ -128,23 +129,25 @@ class Thermostat(object):
 
 	def run_thermostat(self):
 		print('running thermostat with mode: {}'.format(self.mode))
-		if self.mode != self.AUTO:
-			return None
+		if self.mode == self.AUTO:
+			
+			f = self.thermometer.fahrenheit
 
-		f = self.thermometer.fahrenheit
-
-
-		if f <= self.temp_range.lowest:
-			print('temp too low turning up the heat {} <= {}'.format(f, self.temp_range.lowest))
+			if f <= self.temp_range.lowest:
+				print('temp too low turning up the heat {} <= {}'.format(f, self.temp_range.lowest))
+				self.heat()
+			elif self.temp_range.lower < f < self.temp_range.upper:
+				print('leaving it there {} < {} < {}'.format(self.temp_range.lower, f, self.temp_range.upper))
+				self.off()
+			elif self.temp_range.uppest < f:
+				print('temp too high turning up the ac {} > {}'.format(f, self.temp_range.uppest))
+				self.cool()
+			else:
+				print('intermediate area, leaving same {}*F'.format(f))
+		elif self.mode == self.HEATER:
 			self.heat()
-		elif self.temp_range.lower < f < self.temp_range.upper:
-			print('leaving it there {} < {} < {}'.format(self.temp_range.lower, f, self.temp_range.upper))
-			self.off()
-		elif self.temp_range.uppest < f:
-			print('temp too high turning up the ac {} > {}'.format(f, self.temp_range.uppest))
+		elif self.mode == self.COOLER:
 			self.cool()
-		else:
-			print('intermediate area, leaving same {}*F'.format(f))
 
 	@property
 	def temperature(self):
