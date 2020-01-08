@@ -1,22 +1,20 @@
 import sched
 import time
-import pickle
-from models import *
+import json
+from models import Thermostat
 
-data_file = 'thermostat.pkl'
+data_file = 'thermostat.json'
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
-heater = Heater(2)
-cooler = MockCooler()
-thermometer = Thermometer(14)
-temp_range = TempRange(66,67,  78,80)
-thermostat = Thermostat(heater, cooler, thermometer, temp_range, Thermostat.AUTO)
-
 def run_thermostat(scheduler):
-	print('running thermometer')
+	with open(data_file, 'r') as fp:
+		thermostat = Thermostat.from_json(json.load(fp))
 
 	thermostat.run_thermostat()
+
+	with open(data_file, 'w') as fp:
+		json.dump(thermostat.to_json(), fp)
 
 	scheduler.enter(60, 1, run_thermostat, (scheduler,))
 

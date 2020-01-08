@@ -21,47 +21,57 @@
 			<img class="d-block mx-auto mb-4" src="https://img.icons8.com/nolan/96/temperature-sensitive.png">
 			<h1>Corlock Thermostat</h1>
 		</div>
-		<ul class="list-group">
-			<li class="list-group-item">Set Temperature: {{page.set_temp}}&deg;F</li>
-			<li class="list-group-item">Temperature: {{page.temp}}&deg;F</li>
-			<li class="list-group-item">Humidity: {{page.hum}}%</li>
-			<li class="list-group-item">Heater: 
-				<span class="badge {{ 'badge-danger' if page.heater_on else 'badge-secondary' }}">
-					{{ 'on' if page.heater_on else 'off' }}
-				</span>
-			</li>
-			<li class="list-group-item">AC:
-				<span class="badge {{ 'badge-info' if page.ac_on else 'badge-secondary' }}">
-					{{ 'on' if page.ac_on else 'off' }}
-				</span>
-			</li>
-			<li class="list-group-item">Heater Mode: 
-				<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					<label class="btn btn-info active">
-						<input type="radio" name="heater" id="heater-off" checked> Off
-					</label>
-					<label class="btn btn-info">
-						<input type="radio" name="heater" id="heater-on"> On
-					</label>
-					<label class="btn btn-info">
-						<input type="radio" name="heater" id="heater-auto"> Auto
-					</label>
-				</div>
-			</li>
-			<li class="list-group-item">AC Mode: 
-				<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					<label class="btn btn-info active">
-						<input type="radio" name="ac" id="ac-off" checked> Off
-					</label>
-					<label class="btn btn-info">
-						<input type="radio" name="ac" id="ac-on"> On
-					</label>
-					<label class="btn btn-info">
-						<input type="radio" name="ac" id="ac-auto"> Auto
-					</label>
-				</div>
-			</li>
-		</ul>
+		<form method="post">
+			<ul class="list-group">
+				<li class="list-group-item">{{thermostat.temperature}}&deg;F</li>
+				<li class="list-group-item">
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						<label class="btn btn-info">
+							<input type="radio" name="mode" value="off"> Off
+						</label>
+						<label class="btn btn-info">
+							<input type="radio" name="mode" value="auto"> Auto
+						</label>
+						<label class="btn btn-info">
+							<input type="radio" name="mode" value="heater"> Heat
+						</label>
+						<label class="btn btn-info">
+							<input type="radio" name="mode" value="cooler"> Cool
+						</label>
+					</div>
+					{{thermostat.mode}}
+				</li>
+				<li class="list-group-item">Heater: 
+					<span>
+						{{ thermostat.is_heater_on | on_off }}
+					</span>
+				</li>
+				<li class="list-group-item">AC: 
+					<span>
+						{{ thermostat.is_cooler_on | on_off }}
+					</span>
+				</li>
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col">
+							<input type="number" class="form-control" name="lowest" value="{{ thermostat.temp_range.lowest }}"/>
+						</div>
+						<div class="col">
+							<input type="number" class="form-control" name="lower" value="{{ thermostat.temp_range.lower }}"/>
+						</div>
+						<div class="col">
+							<input type="number" class="form-control" name="upper" value="{{ thermostat.temp_range.upper }}"/>
+						</div>
+						<div class="col">
+							<input type="number" class="form-control" name="uppest" value="{{ thermostat.temp_range.uppest }}"/>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<button class="btn btn-info" type="submit">Submit</button>
+				</li>
+			</ul>
+		</form>
 	</div>
 </body>
 </html>
