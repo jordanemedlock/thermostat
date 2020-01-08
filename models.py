@@ -134,16 +134,7 @@ class Thermostat(object):
 		if self.mode != self.AUTO:
 			return None
 
-		f = None
-		seconds = 0
-		while not f and seconds < 5:
-			try:
-				f = self.thermometer.fahrenheit
-			except RuntimeError as e:
-				time.sleep(1)
-				seconds += 1
-		if not f:
-			raise e
+		f = self.thermometer.fahrenheit
 
 
 		if f <= self.temp_range.lowest:
