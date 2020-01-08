@@ -1,17 +1,54 @@
 from iotgpio import *
+import time
 
 
 class Heater(Relay):
-	pass
+	def to_json(self):
+		return {
+			'channel': self.channel,
+			'state': self.state
+		}
+	@classmethod
+	def from_json(cls, obj):
+		channel = obj.get('channel', None)
+		state = obj.get('state', None)
+		if channel != None and state != None:
+			self = cls(channel)
+			self.state = state
+			return self
+		else:
+			return None
 
 class AC(Relay):
-	pass
+	def to_json(self):
+		return {
+			'channel': self.channel,
+			'state': self.state
+		}
+	@classmethod
+	def from_json(cls, obj):
+		channel = obj.get('channel', None)
+		state = obj.get('state', None)
+		if channel != None and state != None:
+			self = cls(channel)
+			self.state = state
+			return self
+		else:
+			return None
 
 class MockCooler():
 	def on(self):
 		pass
 	def off(self):
 		pass
+	@property
+	def is_on(self):
+		return False
+	def to_json(self):
+		return {}
+	@classmethod
+	def from_json(cls, obj):
+		return cls()
 
 class Thermometer(DHT11):
 	@property
@@ -20,7 +57,24 @@ class Thermometer(DHT11):
 
 	@property
 	def fahrenheit(self):
-		return int(self.temperature * (9/5) + 32)
+		print('channel', self.channel)
+		print('internal', self.internal)
+		t = self.internal.temperature
+		print('t', t)
+		return int(t * (9/5) + 32)
+
+	def to_json(self):
+		return {
+			'channel': self.channel
+		}
+
+	@classmethod
+	def from_json(cls, obj):
+		channel = obj.get('channel', None)
+		if channel != None:
+			return cls(channel)
+		else:
+			return None
 
 class TempRange(object):
 	def __init__(self, lowest, lower, upper, uppest):
@@ -28,6 +82,16 @@ class TempRange(object):
 		self.lowest = lowest
 		self.upper = upper
 		self.uppest = uppest
+
+	def to_json(self):
+		return [self.lowest, self.lower, self.upper, self.uppest]
+
+	@classmethod
+	def from_json(cls, obj):
+		if len(obj) == 4:
+			return cls(*obj)
+		else:
+			return None
 
 	
 class Thermostat(object):
@@ -74,7 +138,7 @@ class Thermostat(object):
 		seconds = 0
 		while not f and seconds < 5:
 			try:
-				f = thermometer.fahrenheit
+				f = self.thermometer.fahrenheit
 			except RuntimeError as e:
 				time.sleep(1)
 				seconds += 1
@@ -82,15 +146,17 @@ class Thermostat(object):
 			raise e
 
 
-		if f < self.temp_range.lowest:
-			print('temp too low turning up the heat {} < {}'.format(f, self.temp_range.lowest))
+		if f <= self.temp_range.lowest:
+			print('temp too low turning up the heat {} <= {}'.format(f, self.temp_range.lowest))
 			self.heat()
 		elif self.temp_range.lower < f < self.temp_range.upper:
-			print('leaving it there')
+			print('leaving it there {} < {} < {}'.format(self.temp_range.lower, f, self.temp_range.upper))
 			self.off()
 		elif self.temp_range.uppest < f:
 			print('temp too high turning up the ac {} > {}'.format(f, self.temp_range.uppest))
 			self.cool()
+		else:
+			print('intermediate area, leaving same {}*F'.format(f))
 
 	@property
 	def temperature(self):
@@ -105,7 +171,25 @@ class Thermostat(object):
 		return self.cooler.is_on
 	
 	def to_json(self):
-		return 
-	
-	
+		return {
+			'mode': self.mode,
+			'heater': self.heater.to_json(),
+			'cooler': self.cooler.to_json(),
+			'thermometer': self.thermometer.to_json(),
+			'temp_range': self.temp_range.to_json()
+		}
 
+	@classmethod
+	def from_json(cls, obj):
+		mode = obj.get('mode', None)
+		heater = Heater.from_json(obj['heater'])
+		cooler = MockCooler.from_json(obj['cooler'])
+		thermometer = Thermometer.from_json(obj['thermometer'])
+		temp_range = TempRange.from_json(obj['temp_range'])
+		if mode and heater and cooler and thermometer and temp_range:
+			return cls(heater, cooler, thermometer, temp_range, mode)
+		else:
+			print(mode, heater, cooler, thermometer, temp_range)
+			return None
+	
+	
