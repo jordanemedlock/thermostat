@@ -171,11 +171,10 @@ class Thermostat(object):
 		}
 
 	@classmethod
-	def from_json(cls, obj):
+	def from_json(cls, obj, thermometer):
 		mode = obj.get('mode', None)
 		heater = Heater.from_json(obj['heater'])
 		cooler = MockCooler.from_json(obj['cooler'])
-		thermometer = Thermometer.from_json(obj['thermometer'])
 		temp_range = TempRange.from_json(obj['temp_range'])
 		if mode and heater and cooler and thermometer and temp_range:
 			return cls(heater, cooler, thermometer, temp_range, mode)
