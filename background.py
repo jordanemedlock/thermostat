@@ -16,6 +16,7 @@ def run_thermostat(scheduler):
 	with open(data_file, 'w') as fp:
 		json.dump(thermostat.to_json(), fp)
 
+
 	scheduler.enter(60, 1, run_thermostat, (scheduler,))
 
 run_thermostat(scheduler)
