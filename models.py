@@ -1,4 +1,5 @@
 from iotgpio import *
+import time
 
 
 class Heater(Relay):
@@ -20,7 +21,11 @@ class Thermometer(DHT11):
 
 	@property
 	def fahrenheit(self):
-		return int(self.temperature * (9/5) + 32)
+		print('channel', self.channel)
+		print('internal', self.internal)
+		t = self.internal.temperature
+		print('t', t)
+		return int(t * (9/5) + 32)
 
 class TempRange(object):
 	def __init__(self, lowest, lower, upper, uppest):
@@ -74,7 +79,9 @@ class Thermostat(object):
 		seconds = 0
 		while not f and seconds < 5:
 			try:
-				f = thermometer.fahrenheit
+				print('getting fahrenheit')
+				f = self.thermometer.fahrenheit
+				print('got fahrenheit')
 			except RuntimeError as e:
 				time.sleep(1)
 				seconds += 1
@@ -82,15 +89,17 @@ class Thermostat(object):
 			raise e
 
 
-		if f < self.temp_range.lowest:
-			print('temp too low turning up the heat {} < {}'.format(f, self.temp_range.lowest))
+		if f <= self.temp_range.lowest:
+			print('temp too low turning up the heat {} <= {}'.format(f, self.temp_range.lowest))
 			self.heat()
-		elif self.temp_range.lower < f < self.temp_range.upper:
-			print('leaving it there')
+		elif self.temp_range.lower <= f <= self.temp_range.upper:
+			print('leaving it there {} <= {} <= {}'.format(self.temp_range.lower, f, self.temp_range.upper))
 			self.off()
 		elif self.temp_range.uppest < f:
 			print('temp too high turning up the ac {} > {}'.format(f, self.temp_range.uppest))
 			self.cool()
+		else:
+			print('intermediate area, leaving same {}*F'.format(f))
 
 	@property
 	def temperature(self):

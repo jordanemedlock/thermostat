@@ -1,23 +1,22 @@
 import sched
 import time
 import pickle
-from models import Thermostat
+from models import *
 
 data_file = 'thermostat.pkl'
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
-def run_thermostat(scheduler):
-	print('doing stuff')
+heater = Heater(2)
+cooler = MockCooler()
+thermometer = Thermometer(14)
+temp_range = TempRange(66,67,  78,80)
+thermostat = Thermostat(heater, cooler, thermometer, temp_range, Thermostat.AUTO)
 
-	with open(data_file, 'rb') as fp:
-		thermostat = pickle.load(fp)
+def run_thermostat(scheduler):
+	print('running thermometer')
 
 	thermostat.run_thermostat()
-
-	with open(data_file, 'wb') as fp:
-		pickle.dump(thermostat, fp)
-
 
 	scheduler.enter(60, 1, run_thermostat, (scheduler,))
 
