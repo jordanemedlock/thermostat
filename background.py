@@ -1,15 +1,15 @@
 import sched
 import time
 import json
-from models import Thermostat
+from models import Thermostat, Thermometer
 
 data_file = 'thermostat.json'
 
 scheduler = sched.scheduler(time.time, time.sleep)
-
+thermometer = Thermometer(14)
 def run_thermostat(scheduler):
 	with open(data_file, 'r') as fp:
-		thermostat = Thermostat.from_json(json.load(fp))
+		thermostat = Thermostat.from_json(json.load(fp), thermometer)
 
 	thermostat.run_thermostat()
 
