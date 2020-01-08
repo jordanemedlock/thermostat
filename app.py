@@ -31,11 +31,12 @@ def save_thermostat(obj):
   with open('thermostat.json', 'w') as fp:
     json.dump(obj, fp)
 
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
   thermostat = load_thermostat()
   if request.method == 'POST':
-    print(request.form)
     thermostat['mode'] = request.form.get('mode') or thermostat['mode']
     thermostat['temp_range'][0] = int(request.form.get('lowest'))
     thermostat['temp_range'][1] = int(request.form.get('lower'))
