@@ -57,7 +57,7 @@ class Thermometer(DHT11):
 
 	@property
 	def fahrenheit(self):
-		t = self.temperature
+		t = self.temperature or 15
 		return int(t * (9/5) + 32)
 
 	def to_json(self):
