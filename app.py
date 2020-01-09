@@ -1,6 +1,8 @@
 from flask import Flask, render_template, g, request
 import os
 import json
+import views
+import apscheduler.schedulers.background as aps
 
 app = Flask(__name__)
 
@@ -23,27 +25,28 @@ def active_filter(value, target):
 def checked_filter(value, target):
   return bool_change_filter(value==target, 'checked', '')
 
-def load_thermostat():
-  with open('thermostat.json', 'r') as fp:
-    return json.load(fp)
 
-def save_thermostat(obj):
-  with open('thermostat.json', 'w') as fp:
-    json.dump(obj, fp)
+# @app.before_first_request
+# def activate_thermostat():
+#   def run_job():
+#     while True:
+#       print("Running thermostat")
+#       time.sleep(30)
+
+#   thread = threading.Thread(target=run_job)
+#   thread.start()
+
+scheduler = aps.BackgroundScheduler()
+scheduler.start()
+
+app.register_blueprint(views.control)
+app.register_blueprint(views.ui)
+
+app.secret_key = b'suck my dick'
 
 
-
-@app.route('/', methods=['POST', 'GET'])
-def index():
-  thermostat = load_thermostat()
-  if request.method == 'POST':
-    thermostat['mode'] = request.form.get('mode') or thermostat['mode']
-    thermostat['temp_range'][0] = int(request.form.get('lowest'))
-    thermostat['temp_range'][1] = int(request.form.get('lower'))
-    thermostat['temp_range'][2] = int(request.form.get('upper'))
-    thermostat['temp_range'][3] = int(request.form.get('uppest'))
-    save_thermostat(thermostat)
-  return render_template('index.html', thermostat=thermostat)
+views.activate_thermostat(scheduler)
+print(app.url_map)
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', debug=True)
+  app.run(host='0.0.0.0', debug=True, use_reloader=False)
