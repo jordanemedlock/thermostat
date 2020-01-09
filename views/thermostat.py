@@ -1,29 +1,59 @@
-from flask import Blueprint, g
-from werkzeug.routing import BaseConverter
+from flask import Blueprint, g, current_app, session
+import threading
+import requests
 
-thermostat = Blueprint('thermostat', __name__)
 
-class ModeConverter(BaseConverter):
-	modes = {
-		g.thermostat.HEATER: g.thermostat.HEATER,
-		g.thermostat.COOLER: g.thermostat.COOLER,
-		g.thermostat.AUTO: g.thermostat.AUTO,
-		g.thermostat.OFF: g.thermostat.OFF,
-	}
-	def to_python(self, value):
-		value = value.lower()
-		if value not in self.modes:
-			raise ValidationError()
-		return value
+temp_range = [65, 67, 78, 80]
 
-	def to_url(self, value):
-		value = value.lower()
-		if value not in self.modes:
-			raise ValidationError()
-		return value
+host = "localhost:5000"
 
-thermostat.url_map.converters['mode'] = ModeConverter
+def set(appliance, state):
+  requests.post('http://{}/{}/{}'.format(host, appliance, state))
 
-@thermostat.route('/set-mode/<mode:mode>')
-def 
-# TODO: continue here
+def off():
+  set('heater', 'off')
+  set('cooler', 'off')
+def heat():
+  set('heater', 'on')
+  set('cooler', 'off')
+def cool():
+  set('heater', 'off')
+  set('cooler', 'on')
+
+def get_temp():
+  return float(requests.get('http://{}/thermometer'.format(host)).text)
+
+
+def get_mode():
+  return requests.get('http://{}/mode/'.format(host)).text
+
+
+def run_thermostat():
+  global temp_range
+  mode = get_mode()
+  print('Mode: {}'.format(mode))
+  if mode == 'off':
+    off()
+  if mode == 'heater':
+    heat()
+  if mode == 'cooler':
+    cool()
+  if mode == 'auto':
+    f = get_temp()
+    if f < temp_range[0]:
+      print('Temperature: {} turning on heater'.format(f))
+      heat()
+    elif temp_range[1] < f < temp_range[2]:
+      print('Temperature: {} turning off everything'.format(f))
+      off()
+    elif temp_range[3] < f:
+      print('Temperature: {} turning on cooler'.format(f))
+      cool()
+    else:
+      print('Temperature: {} not changing anything'.format(f))
+
+
+
+def activate_thermostat(scheduler):
+  scheduler.add_job(run_thermostat, trigger='interval', args=[], seconds=10)
+

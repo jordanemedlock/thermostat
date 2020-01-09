@@ -50,29 +50,8 @@ class MockCooler():
 	def from_json(cls, obj):
 		return cls()
 
-class Thermometer(DHT11):
-	@property
-	def celsius(self):
-		return self.temperature
-
-	@property
-	def fahrenheit(self):
-		t = self.temperature or 15
-		return int(t * (9/5) + 32)
-
-	def to_json(self):
-		return {
-			'channel': self.channel,
-			'temperature': self.fahrenheit
-		}
-
-	@classmethod
-	def from_json(cls, obj):
-		channel = obj.get('channel', None)
-		if channel != None:
-			return cls(channel)
-		else:
-			return None
+class Thermometer(DS18B20):
+	pass
 
 class TempRange(object):
 	def __init__(self, lowest, lower, upper, uppest):
