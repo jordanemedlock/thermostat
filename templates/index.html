@@ -18,14 +18,19 @@
 </head>
 <body>
 	<div class="container">
-		<div class="py-5 text-center"><!-- 
-			<img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+		<div id="temperature-dial">
+			<div id="temperature-text">
+				68&deg;F
+			</div>
+		</div>
+		<!-- <div class="py-5 text-center">
+			<img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
 			<img class="d-block mx-auto mb-4" src="https://img.icons8.com/nolan/96/temperature-sensitive.png">
 			<h1>Corlock Thermostat</h1>
-		</div>
+		</div> --><!-- 
 		<form method="post">
 			<ul class="list-group">
-				<li class="list-group-item">{{thermostat.thermometer.temperature}}&deg;F</li>
+				<li class="list-group-item">{{page.temp}}&deg;F</li>
 				<li class="list-group-item">
 					<div class="btn-group btn-group-toggle" data-toggle="buttons">
 						<label class="btn btn-info">
@@ -41,31 +46,31 @@
 							<input type="radio" name="mode" value="cooler"> Cool
 						</label>
 					</div>
-					{{thermostat.mode}}
+					{{page.mode}}
 				</li>
 				<li class="list-group-item">Heater: 
 					<span>
-						{{ thermostat.heater.state }}
+						{{ page.heater }}
 					</span>
 				</li>
 				<li class="list-group-item">AC: 
 					<span>
-						{{ thermostat.cooler.state }}
+						{{ page.cooler }}
 					</span>
 				</li>
 				<li class="list-group-item">
 					<div class="row">
 						<div class="col">
-							<input type="number" class="form-control" name="lowest" value="{{ thermostat.temp_range[0] }}"/>
+							<input type="number" class="form-control" name="lowest" value="{{ page.temp_range[0] }}"/>
 						</div>
 						<div class="col">
-							<input type="number" class="form-control" name="lower" value="{{ thermostat.temp_range[1] }}"/>
+							<input type="number" class="form-control" name="lower" value="{{ page.temp_range[1] }}"/>
 						</div>
 						<div class="col">
-							<input type="number" class="form-control" name="upper" value="{{ thermostat.temp_range[2] }}"/>
+							<input type="number" class="form-control" name="upper" value="{{ page.temp_range[2] }}"/>
 						</div>
 						<div class="col">
-							<input type="number" class="form-control" name="uppest" value="{{ thermostat.temp_range[3] }}"/>
+							<input type="number" class="form-control" name="uppest" value="{{ page.temp_range[3] }}"/>
 						</div>
 					</div>
 				</li>
@@ -73,7 +78,7 @@
 					<button class="btn btn-info" type="submit">Submit</button>
 				</li>
 			</ul>
-		</form>
+		</form> -->
 	</div>
 </body>
 </html>

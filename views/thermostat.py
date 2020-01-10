@@ -55,5 +55,6 @@ def run_thermostat():
 
 
 def activate_thermostat(scheduler):
-  scheduler.add_job(run_thermostat, trigger='interval', args=[], seconds=10)
+  pass
+  #scheduler.add_job(run_thermostat, trigger='interval', args=[], seconds=10)
 

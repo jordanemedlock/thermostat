@@ -1,9 +1,28 @@
-#set-temp {
-	margin-left: auto;
-	margin-right: auto;
+
+body {
+	background: #EEEEEE;
 }
 
-#temperature {
-	margin-left: auto;
-	margin-right: auto;
+
+#temperature-dial {
+	--dial-width: 300px;
+	/*background: #AAAAAA;*/
+	width: var(--dial-width);
+	height:  var(--dial-width);
+	border-radius:  50%;
+	margin: auto;
+	margin-top: calc((100vw - var(--dial-width)) / 2);
+
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	padding-top: calc(150px - 54px);
+}
+
+#temperature-text {
+  font-size: 72px;
+  background: -webkit-linear-gradient(#2AF, #E0E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-align: center;
+  height: 108px;
 }
