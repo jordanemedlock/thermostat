@@ -13,8 +13,49 @@ body {
 	margin: auto;
 	margin-top: calc((100vw - var(--dial-width)) / 2);
 
-	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
 	padding-top: calc(150px - 54px);
+
+	animation: popout 2s;
+	-moz-animation: popout 2s;
+	-webkit-animation: popout 2s;
+	-o-animation: popout 2s;
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+}
+
+@keyframes popout {
+	from {
+		box-shadow: 0px 0px 0px 0px #EEEEEE, 0px 0px 0px 0px #EEEEEE;
+	}
+	to {
+		box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	}
+}
+
+@-moz-keyframes popout {
+	from {
+		box-shadow: 0px 0px 0px 0px #EEEEEE, 0px 0px 0px 0px #EEEEEE;
+	}
+	to {
+		box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	}
+}
+
+@-webkit-keyframes popout {
+	from {
+		box-shadow: 0px 0px 0px 0px #EEEEEE, 0px 0px 0px 0px #EEEEEE;
+	}
+	to {
+		box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	}
+}
+
+@-o-keyframes popout {
+	from {
+		box-shadow: 0px 0px 0px 0px #EEEEEE, 0px 0px 0px 0px #EEEEEE;
+	}
+	to {
+		box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	}
 }
 
 #temperature-text {
@@ -25,4 +66,37 @@ body {
 
   text-align: center;
   height: 108px;
+}
+
+.temp-vert-toggle {
+	height: 120px;
+	width: 90px;
+	border-radius: 30px;
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	animation: popout 2s;
+	-moz-animation: popout 2s;
+	-webkit-animation: popout 2s;
+	-o-animation: popout 2s;
+	margin: 20px;
+}
+
+.temp-up-button {
+	height: 50%;
+	border-bottom: solid #7772;
+	width: 100%;
+}
+
+.chevron-up {
+	width: 60px; height: 60px; background-color: #7772;
+	-webkit-mask-image: url('https://img.icons8.com/metro/52/000000/chevron-up.png');
+	margin-left: calc(45px - 30px);
+}
+
+.chevron-down {
+	width: 60px; height: 60px; background-color: #7772;
+	-webkit-mask-image: url('https://img.icons8.com/metro/52/000000/chevron-down.png');
+	margin-left: calc(45px - 30px);
+}
+
+.controls-row {
 }
