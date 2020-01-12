@@ -4,51 +4,69 @@ import glob
 
 control = Blueprint('control', __name__)
 
-
-def get_device_file():
-  base_dir = '/sys/bus/w1/devices/'
-  # device_folder = glob.glob(base_dir + '28*')[0]
-  # device_folder = 
-  device_file = device_folder + '/w1_slave'
-  return device_file
-
 @control.before_request
 def initialize_variables():
   g.heater = Heater(2)
   g.cooler = AC(3)
-  #g.thermometer = Thermometer(get_device_file())
+  g.thermometer = Thermometer()
   if 'mode' not in session:
     session['mode'] = 'off'
 
 
-@control.route('/cooler/<on_off>', methods=['GET', 'POST'])
+@control.route('/cooler', methods=['GET'], defaults={'on_off':None})
+@control.route('/cooler/<on_off>', methods=['POST'])
 def cooler_set(on_off):
   if request.method=='POST':
     if on_off.lower() == 'on':
       g.cooler.on()
+      return 'on'
     elif on_off.lower() == 'off':
       g.cooler.off()
-  return 'on' if g.cooler.is_on else 'off'
+      return 'off'
+  else:
+    return 'on' if g.cooler.is_on else 'off'
 
 
-@control.route('/heater/<on_off>', methods=['GET', 'POST'])
+@control.route('/heater', methods=['GET'], defaults={'on_off': None})
+@control.route('/heater/<on_off>', methods=['POST'])
 def heater_set(on_off):
-  if request.method=='POST':
+  if request.method in ['POST']:
     if on_off.lower() == 'on':
       g.heater.on()
+      return 'on'
     elif on_off.lower() == 'off':
       g.heater.off()
-  return 'on' if g.heater.is_on else 'off'
+      return 'off'
+  else:
+    return 'on' if g.heater.is_on else 'off'
+
 
 @control.route('/temperature/', methods=['GET'])
 def temperature():
-  return g.thermometer.fahrenheit
+  return str(g.thermometer.fahrenheit)
 
-@control.route('/mode', methods=['GET'])
+@control.route('/mode', methods=['GET'], defaults={'mode': None})
 @control.route('/mode/<mode>', methods=['POST'])
 def mode(mode):
   if request.method=='POST':
-    mode = mode.lower()
-    if mode in ['off', 'heater', 'cooler', 'auto']:
-      session['mode'] = mode
-  return session['mode']
+    with open('mode.txt', 'w') as fp:
+        mode = mode.lower()
+        if mode in ['off', 'heater', 'cooler', 'auto']:
+            fp.write(mode)
+    return mode
+  else:
+    with open('mode.txt', 'r') as fp:
+        return fp.read()
+
+@control.route('/temps', methods=['GET', 'POST'])
+def temps():
+  if request.method == 'GET':
+    with open('temps.txt', 'rb') as fp:
+      ts_string = fp.read()
+    return ts_string
+  else:
+    with open('temps.txt', 'wb') as fp:
+      temps = request.data
+      fp.write(temps)
+    return temps
+
