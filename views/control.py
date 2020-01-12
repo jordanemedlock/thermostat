@@ -63,10 +63,12 @@ def temps():
   if request.method == 'GET':
     with open('temps.txt', 'rb') as fp:
       ts_string = fp.read()
+      print(ts_string)
     return ts_string
   else:
     with open('temps.txt', 'wb') as fp:
-      temps = request.data
+      temps = request.get_data()
+      print(temps)
       fp.write(temps)
     return temps
 
