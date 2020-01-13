@@ -22,6 +22,7 @@ def create_app(test_config=None):
 	app.register_blueprint(views.control)
 	app.register_blueprint(views.ui)
 
-	views.activate_thermostat(scheduler)
+	if app.config.get('RUN_THERMOSTAT'):
+		views.activate_thermostat(scheduler, app.config)
 
 	return app

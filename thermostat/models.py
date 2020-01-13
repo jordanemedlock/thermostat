@@ -36,19 +36,39 @@ class AC(Relay):
 		else:
 			return None
 
-class MockCooler():
+class MockHeater():
 	def on(self):
 		pass
+
 	def off(self):
 		pass
+
 	@property
 	def is_on(self):
 		return False
-	def to_json(self):
-		return {}
-	@classmethod
-	def from_json(cls, obj):
-		return cls()
+	
+
+class MockCooler():
+	def on(self):
+		pass
+
+	def off(self):
+		pass
+
+	@property
+	def is_on(self):
+		return False
+
+class MockThermometer():
+	@property
+	def celcius(self):
+		return 20
+	
+	@property
+	def fahrenheit(self):
+		return self.celcius * 9 / 5 + 32
+	
+	
 
 class Thermometer(DS18B20):
 	pass

@@ -33,7 +33,7 @@ def get_mode():
   return requests.get('http://{}/mode'.format(host)).text
 
 
-def run_thermostat():
+def run_thermostat(settings):
   global temp_range
   mode = get_mode()
   print('Mode: {}'.format(mode))
@@ -60,6 +60,7 @@ def run_thermostat():
 
 
 
-def activate_thermostat(scheduler):
-  scheduler.add_job(run_thermostat, trigger='interval', args=[], seconds=30)
+def activate_thermostat(scheduler, settings):
+  seconds = int(settings.get('THERMOSTAT_RUN_SECONDS'))
+  scheduler.add_job(run_thermostat, trigger='interval', args=[settings], seconds=seconds)
 
