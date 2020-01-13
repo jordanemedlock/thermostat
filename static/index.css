@@ -77,26 +77,89 @@ body {
 	-moz-animation: popout 2s;
 	-webkit-animation: popout 2s;
 	-o-animation: popout 2s;
-	margin: 20px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .temp-up-button {
 	height: 50%;
-	border-bottom: solid #7772;
+	border-bottom: 2px solid #7772;
 	width: 100%;
 }
 
 .chevron-up {
 	width: 60px; height: 60px; background-color: #7772;
 	-webkit-mask-image: url('https://img.icons8.com/metro/52/000000/chevron-up.png');
-	margin-left: calc(45px - 30px);
+	margin: 0px auto 0px auto;
+	display: block;
 }
 
 .chevron-down {
 	width: 60px; height: 60px; background-color: #7772;
 	-webkit-mask-image: url('https://img.icons8.com/metro/52/000000/chevron-down.png');
-	margin-left: calc(45px - 30px);
+	margin: 0px auto 0px auto;
+	display: block;
 }
 
 .controls-row {
+}
+
+#upper-temp-toggle {
+	float: left;
+}
+
+.temp-box {
+	width: 40px;
+	height: 40px;
+	margin: calc(60px - 21px) auto 0 auto;
+	background: #EEEEEE;
+	border: none;
+	border-radius: 10px;
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	animation: popout 2s;
+	-moz-animation: popout 2s;
+	-webkit-animation: popout 2s;
+	-o-animation: popout 2s;
+	padding: 10px;
+}
+
+.temp-col {
+	padding: 0px;
+}
+
+#mode-buttons>.btn{
+	background: none;
+	border: none;
+	color: #7772;
+	font-weight: bold;
+	font-size: 24px;
+	text-align: center;
+}
+
+#mode-buttons {
+	border-radius: 30px;
+	padding-top: 3px;
+	height: 60px;
+	width: 100%;
+	margin-top: 15px;
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	animation: popout 2s;
+	-moz-animation: popout 2s;
+	-webkit-animation: popout 2s;
+	-o-animation: popout 2s;
+}
+
+.circle-60 {
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	box-shadow: 5px 5px 8px 4px #7772, -5px -5px 8px 4px #FFF8;
+	animation: popout 2s;
+	-moz-animation: popout 2s;
+	-webkit-animation: popout 2s;
+	-o-animation: popout 2s;
+}
+
+.plus-btn {
+	margin-bottom: 15px;
 }
