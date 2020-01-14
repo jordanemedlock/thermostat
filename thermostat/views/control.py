@@ -13,7 +13,7 @@ def initialize_variables():
   else:
     g.heater = Heater(current_app.config.get('HEATER_PIN'))
     g.cooler = AC(current_app.config.get('COOLER_PIN'))
-    g.thermometer = Thermometer.make_thermometer(current_app.config.get('THERMOMETER_TYPE'))
+    g.thermometer = Thermometer()
 
 
 @control.route('/cooler', methods=['GET'], defaults={'on_off':None})
