@@ -3,38 +3,10 @@ import time
 
 
 class Heater(Relay):
-  def to_json(self):
-    return {
-      'channel': self.channel,
-      'state': self.state
-    }
-  @classmethod
-  def from_json(cls, obj):
-    channel = obj.get('channel', None)
-    state = obj.get('state', None)
-    if channel != None and state != None:
-      self = cls(channel)
-      self.state = state
-      return self
-    else:
-      return None
+  pass
 
 class AC(Relay):
-  def to_json(self):
-    return {
-      'channel': self.channel,
-      'state': self.state
-    }
-  @classmethod
-  def from_json(cls, obj):
-    channel = obj.get('channel', None)
-    state = obj.get('state', None)
-    if channel != None and state != None:
-      self = cls(channel)
-      self.state = state
-      return self
-    else:
-      return None
+  pass
 
 class MockHeater():
   def on(self):
@@ -80,15 +52,6 @@ class TempRange(object):
     self.upper = upper
     self.uppest = uppest
 
-  def to_json(self):
-    return [self.lowest, self.lower, self.upper, self.uppest]
-
-  @classmethod
-  def from_json(cls, obj):
-    if len(obj) == 4:
-      return cls(*obj)
-    else:
-      return None
 
   
 class Thermostat(object):
@@ -159,26 +122,5 @@ class Thermostat(object):
   @property
   def is_cooler_on(self):
     return self.cooler.is_on
-  
-  def to_json(self):
-    return {
-      'mode': self.mode,
-      'heater': self.heater.to_json(),
-      'cooler': self.cooler.to_json(),
-      'thermometer': self.thermometer.to_json(),
-      'temp_range': self.temp_range.to_json()
-    }
-
-  @classmethod
-  def from_json(cls, obj, thermometer):
-    mode = obj.get('mode', None)
-    heater = Heater.from_json(obj['heater'])
-    cooler = MockCooler.from_json(obj['cooler'])
-    temp_range = TempRange.from_json(obj['temp_range'])
-    if mode and heater and cooler and thermometer and temp_range:
-      return cls(heater, cooler, thermometer, temp_range, mode)
-    else:
-      print(mode, heater, cooler, thermometer, temp_range)
-      return None
   
   
