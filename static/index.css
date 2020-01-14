@@ -163,3 +163,12 @@ body {
 .plus-btn {
 	margin-bottom: 15px;
 }
+
+.lower-plus-minus {
+	float: left;
+}
+
+.lower-temp-circle {
+	margin-left: 73px;
+	margin-top: 30px;
+}
