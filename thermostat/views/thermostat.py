@@ -3,7 +3,6 @@ import threading
 import requests
 
 
-temp_range = [65, 67, 78, 80]
 
 host = "localhost:5000"
 
@@ -21,14 +20,20 @@ def cool():
   set('cooler', 'on')
 
 def get_temp():
-  return float(requests.get('http://{}/thermometer'.format(host)).text)
+  return float(requests.get('http://{}/temperature'.format(host)).text)
 
+def get_temps():
+  ts_string = requests.get('http://{}/temps'.format(host)).text
+  return list(map(float, ts_string.split(' ')))
+
+def set_temps(*args):
+  requests.post('http://{}/temps'.format(host), data=' '.join(args))
 
 def get_mode():
-  return requests.get('http://{}/mode/'.format(host)).text
+  return requests.get('http://{}/mode'.format(host)).text
 
 
-def run_thermostat():
+def run_thermostat(settings):
   global temp_range
   mode = get_mode()
   print('Mode: {}'.format(mode))
@@ -40,6 +45,7 @@ def run_thermostat():
     cool()
   if mode == 'auto':
     f = get_temp()
+    temp_range = get_temps()
     if f < temp_range[0]:
       print('Temperature: {} turning on heater'.format(f))
       heat()
@@ -54,7 +60,7 @@ def run_thermostat():
 
 
 
-def activate_thermostat(scheduler):
-  pass
-  #scheduler.add_job(run_thermostat, trigger='interval', args=[], seconds=10)
+def activate_thermostat(scheduler, settings):
+  seconds = int(settings.get('THERMOSTAT_RUN_SECONDS'))
+  scheduler.add_job(run_thermostat, trigger='interval', args=[settings], seconds=seconds)
 

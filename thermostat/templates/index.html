@@ -1,0 +1,74 @@
+<html>
+<head>
+
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="/static/index.css">
+
+
+  <script src="/static/index.js"></script>
+  <title>Corlock Thermostat</title>
+</head>
+<body>
+  <div class="container">
+    <div class="py-5 text-center"><!-- 
+      <img class="d-block mx-auto mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+      <img class="d-block mx-auto mb-4" src="https://img.icons8.com/nolan/96/temperature-sensitive.png">
+      <h1>Corlock Thermostat</h1>
+
+    </div>
+    <form method="post">
+      <ul class="list-group">
+        <li class="list-group-item"><span id="temperature-display"></span>&deg;F</li>
+        <li class="list-group-item">
+          <div id="mode-group" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-info">
+              <input type="radio" name="mode" value="off"> Off
+            </label>
+            <label class="btn btn-info">
+              <input type="radio" name="mode" value="auto"> Auto
+            </label>
+            <label class="btn btn-info">
+              <input type="radio" name="mode" value="heater"> Heat
+            </label>
+            <label class="btn btn-info">
+              <input type="radio" name="mode" value="cooler"> Cool
+            </label>
+          </div>
+        </li>
+        <li class="list-group-item">Heater: 
+          <span id="heater-display"></span>
+        </li>
+        <li class="list-group-item">AC: 
+          <span id="cooler-display"></span>
+
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <input type="number" class="temp-control form-control" name="lowest" value=""/>
+            </div>
+            <div class="col">
+              <input type="number" class="temp-control form-control" name="lower" value=""/>
+            </div>
+            <div class="col">
+              <input type="number" class="temp-control form-control" name="upper" value=""/>
+            </div>
+            <div class="col">
+              <input type="number" class="temp-control form-control" name="uppest" value=""/>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</body>
+</html>
