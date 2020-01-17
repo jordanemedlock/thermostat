@@ -11,7 +11,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="/static/index.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/index.css"/>
 
 
 	<title>Corlock Thermostat</title>
@@ -27,42 +27,47 @@
 		</div>
 		<div class="row controls-row">
 			<div class="col">
-				<div class="lower-group">
-					<div class="lower-plus-minus plus-minus-buttons">
-						<div class="circle-60 plus-btn">
-
-						</div>
-						<div class="circle-60 minus-btn">
-
-						</div>
+				<div class="left-temp-control">
+					<div class="plus-btn">
+						<img src="https://img.icons8.com/metro/52/000000/plus-math.png">
 					</div>
-					<div class="lower-temp-circle circle-60">
-
+					<div class="minus-btn">
+						<img src="https://img.icons8.com/metro/52/000000/minus-math.png">
 					</div>
-
-				</div>
-				<div class="upper-group">
-
+					<div class="temp-control">
+						<div>67</div>
+					</div>
 				</div>
 			</div>
 			<div class="col">
+				<div class="right-temp-control">
+					<div class="plus-btn">
+						<img src="https://img.icons8.com/metro/52/000000/plus-math.png">
+					</div>
+					<div class="minus-btn">
+						<img src="https://img.icons8.com/metro/52/000000/minus-math.png">
+					</div>
+					<div class="temp-control">
+						<div>80</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<div id="mode-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
-					<label class="btn btn-light">
-						<input type="radio" name="mode" value="off"> Off
-					</label>
-					<label class="btn btn-light">
-						<input type="radio" name="mode" value="auto"> Auto
-					</label>
-					<label class="btn btn-light">
-						<input type="radio" name="mode" value="heater"> Heat
-					</label>
-					<label class="btn btn-light">
-						<input type="radio" name="mode" value="cooler"> Cool
-					</label>
+				<div class="mode-btn">
+				</div>
+			</div>
+			<div class="col">
+				<div class="mode-btn">
+				</div>
+			</div>
+			<div class="col">
+				<div class="mode-btn">
+				</div>
+			</div>
+			<div class="col">
+				<div class="mode-btn">
 				</div>
 			</div>
 

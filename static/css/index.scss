@@ -1,0 +1,146 @@
+@use "sass:color";
+
+$browsers: ['', '-moz-', '-webkit-', '-o-'];
+
+@mixin circle($diameter) {
+  width: $diameter;
+  height: $diameter;
+
+  border-radius: $diameter / 2;
+}
+
+@mixin neu-shadow($depth, $light-color: #FFF, $dark-color: #777) {
+  $dark-shadow: color.change($dark-color, $alpha: $depth);
+  $light-shadow: color.change($light-color, $alpha: $depth);
+  box-shadow: 5px 5px 8px 4px $dark-shadow, -5px -5px 8px 4px $light-shadow;
+}
+
+@mixin animation($values) {
+  @each $browser in $browsers {
+    #{$browser}animation: $values;
+  }
+}
+
+
+@each $browser in $browsers {
+  @#{$browser}keyframes popout {
+    from {
+      @include neu-shadow(0.0);
+    }
+    to {
+      @include neu-shadow(0.6);
+    }
+  }
+}
+
+@mixin neu-circle($diameter) {
+  @include circle($diameter);
+  @include neu-shadow(0.6);
+  @include animation(popout 2s);
+
+}
+
+
+$light-grey: #EEE;
+$dial-width: 300px;
+
+body {
+  background: $light-grey;
+}
+
+#temperature-dial {
+  @include neu-circle($dial-width);
+
+  margin: auto;
+  margin-top: calc((100vw - #{$dial-width}) / 2);
+
+  padding-top: $dial-width / 2 - 54px; // minus half the text width???
+}
+
+#temperature-text {
+  font-size: 72px;
+  background: -webkit-linear-gradient(rgb(0, 157, 255), rgb(255, 0, 255));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-align: center;
+  height: 108px;
+}
+
+
+$button-width: 60px;
+$temp-control-width: 80px;
+
+.plus-btn {
+  @include neu-circle($button-width);
+  padding: 10px;
+  img {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.minus-btn {
+  @include neu-circle($button-width);
+  padding: 10px;
+  img {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.temp-control {
+  @include neu-circle($temp-control-width);
+  div {
+    margin: auto;
+    width: 20px;
+  }
+}
+
+$temp-button-padding: 15px;
+
+.left-temp-control {
+  width: $button-width + $temp-control-width + $temp-button-padding;
+  height: 2 * $button-width + $temp-button-padding;
+  .plus-btn {
+    position: absolute;
+    top: 0px;
+    left: $temp-button-padding;
+  }
+  .minus-btn {
+    position: absolute;
+    top: $button-width + $temp-button-padding;
+    left: $temp-button-padding;
+  }
+  .temp-control {
+    position: absolute;
+    top: $button-width + $temp-button-padding / 2 - $temp-control-width / 2;
+    left: $button-width + 2 * $temp-button-padding;
+  }
+}
+
+.right-temp-control {
+  width: $button-width + $temp-control-width + $temp-button-padding;
+  height: 2 * $button-width + $temp-button-padding;
+  .plus-btn {
+    position: absolute;
+    top: 0px;
+    right: $temp-button-padding;
+  }
+  .minus-btn {
+    position: absolute;
+    top: $button-width + $temp-button-padding;
+    right: $temp-button-padding;
+  }
+  .temp-control {
+    position: absolute;
+    top: $button-width + $temp-button-padding / 2 - $temp-control-width / 2;
+    right: $button-width + 2 * $temp-button-padding;
+  }
+}
+
+.mode-btn {
+  @include neu-circle($button-width);
+  margin-top: $temp-button-padding;
+}

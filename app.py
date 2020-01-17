@@ -3,6 +3,7 @@ import os
 import json
 import views
 import apscheduler.schedulers.background as aps
+from sassutils.builder import build_directory
 
 app = Flask(__name__)
 
@@ -26,15 +27,9 @@ def checked_filter(value, target):
   return bool_change_filter(value==target, 'checked', '')
 
 
-# @app.before_first_request
-# def activate_thermostat():
-#   def run_job():
-#     while True:
-#       print("Running thermostat")
-#       time.sleep(30)
-
-#   thread = threading.Thread(target=run_job)
-#   thread.start()
+@app.before_request
+def compile_css():
+  os.system('sass static/css')
 
 scheduler = aps.BackgroundScheduler()
 scheduler.start()
@@ -46,7 +41,7 @@ app.secret_key = b'suck my dick'
 
 
 views.activate_thermostat(scheduler)
-print(app.url_map)
+
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', debug=True)
