@@ -5,8 +5,9 @@ from thermostat import views
 import apscheduler.schedulers.background as aps
 
 def create_app(test_config=None):
-  app = Flask(__name__, instance_relative_config=True)
+  app = Flask(__name__)
   app.config.from_envvar('APP_SETTINGS')
+  app.config['ENV'] = 'development'
 
   try:
     os.makedirs(app.instance_path)

@@ -15,6 +15,12 @@ $browsers: ['', '-moz-', '-webkit-', '-o-'];
   box-shadow: 5px 5px 8px 4px $dark-shadow, -5px -5px 8px 4px $light-shadow;
 }
 
+@mixin inset-shadow($depth, $dark-color: #777) {
+  $dark-shadow: color.change($dark-color, $alpha: $depth);
+  box-shadow: inset 0px 0px 4px 2px $dark-shadow;
+
+}
+
 @mixin animation($values) {
   @each $browser in $browsers {
     #{$browser}animation: $values;
@@ -28,16 +34,34 @@ $browsers: ['', '-moz-', '-webkit-', '-o-'];
       @include neu-shadow(0.0);
     }
     to {
-      @include neu-shadow(0.6);
+      @include neu-shadow(0.4);
     }
   }
 }
 
 @mixin neu-circle($diameter) {
   @include circle($diameter);
-  @include neu-shadow(0.6);
+  @include neu-shadow(0.4);
   @include animation(popout 2s);
+}
 
+@mixin circle-icon() {
+
+  padding: 10px;
+  img {
+    height: 40px;
+    width: 40px;
+  }
+
+  &:active {
+    @include neu-shadow(0.0);
+    @include inset-shadow(0.2);
+    padding: 11px;
+    img {
+      height: 38px;
+      width: 38px;
+    }
+  }
 }
 
 
@@ -74,20 +98,12 @@ $temp-control-width: 80px;
 
 .plus-btn {
   @include neu-circle($button-width);
-  padding: 10px;
-  img {
-    height: 40px;
-    width: 40px;
-  }
+  @include circle-icon();
 }
 
 .minus-btn {
   @include neu-circle($button-width);
-  padding: 10px;
-  img {
-    height: 40px;
-    width: 40px;
-  }
+  @include circle-icon();
 }
 
 .temp-control {
@@ -142,5 +158,6 @@ $temp-button-padding: 15px;
 
 .mode-btn {
   @include neu-circle($button-width);
+  @include circle-icon();
   margin-top: $temp-button-padding;
 }
