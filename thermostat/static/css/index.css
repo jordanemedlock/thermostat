@@ -189,4 +189,26 @@ body {
   width: 38px;
 }
 
+.mode-btn.active {
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  box-shadow: inset 0px 0px 4px 2px rgba(119, 119, 119, 0.2);
+  padding: 11px;
+}
+.mode-btn.active img {
+  height: 38px;
+  width: 38px;
+}
+
+#mode-heater.active {
+  background-color: #F00;
+}
+
+#mode-cooler.active {
+  background-color: #00F;
+}
+
+#mode-auto.active {
+  background: -webkit-linear-gradient(#009dff, fuchsia);
+}
+
 /*# sourceMappingURL=index.css.map */

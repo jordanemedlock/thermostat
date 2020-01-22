@@ -13,10 +13,10 @@ $(function() {
 interface Window { temps: Array<number>; }
 
 enum Mode {
-  Off = 'off',
-  Auto = 'auto',
-  Heater = 'heater',
-  Cooler = 'cooler'
+  off,
+  auto,
+  heater,
+  cooler
 }
 
 function loadAll() {
@@ -55,7 +55,7 @@ function setTemps(temps: Array<number>) {
 }
 
 function setMode(mode: Mode) {
-  $.post('/mode', mode);
+  $.post('/mode/' + mode);
 }
 
 

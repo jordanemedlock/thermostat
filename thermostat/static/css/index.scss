@@ -161,3 +161,25 @@ $temp-button-padding: 15px;
   @include circle-icon();
   margin-top: $temp-button-padding;
 }
+
+.mode-btn.active {
+  @include neu-shadow(0.0);
+  @include inset-shadow(0.2);
+  padding: 11px;
+  img {
+    height: 38px;
+    width: 38px;
+  }
+}
+
+#mode-heater.active {
+  background-color: #F00; // TODO: I dont like this color;
+}
+
+#mode-cooler.active {
+  background-color: #00F; // TODO: I dont like this color either
+}
+
+#mode-auto.active {
+  background: -webkit-linear-gradient(rgb(0, 157, 255), rgb(255, 0, 255));
+}

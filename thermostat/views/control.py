@@ -54,13 +54,15 @@ def mode(mode):
   mode_file = current_app.config.get('MODE_FILE')
   if request.method=='POST':
     with open(mode_file, 'w') as fp:
-        mode = mode.lower()
-        if mode in ['off', 'heater', 'cooler', 'auto']:
-            fp.write(mode)
+      mode = mode.lower()
+      if mode in ['off', 'heater', 'cooler', 'auto']:
+        fp.write(mode)
     return mode
   else:
     with open(mode_file, 'r') as fp:
-        return fp.read()
+      mode = fp.read()
+      print('mode', mode)
+      return mode
 
 @control.route('/temps', methods=['GET', 'POST'])
 def temps():

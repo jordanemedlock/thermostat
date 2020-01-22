@@ -9,10 +9,10 @@ $(function () {
 });
 var Mode;
 (function (Mode) {
-    Mode["Off"] = "off";
-    Mode["Auto"] = "auto";
-    Mode["Heater"] = "heater";
-    Mode["Cooler"] = "cooler";
+    Mode[Mode["off"] = 0] = "off";
+    Mode[Mode["auto"] = 1] = "auto";
+    Mode[Mode["heater"] = 2] = "heater";
+    Mode[Mode["cooler"] = 3] = "cooler";
 })(Mode || (Mode = {}));
 function loadAll() {
     loadTemperature();
@@ -44,7 +44,7 @@ function setTemps(temps) {
     $.post('/temps', msg);
 }
 function setMode(mode) {
-    $.post('/mode', mode);
+    $.post('/mode/' + mode);
 }
 function loadTemperature() {
     $('#temperature-text').html(getTemperature() + '&deg;F');
