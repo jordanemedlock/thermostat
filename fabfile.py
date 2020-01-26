@@ -1,217 +1,52 @@
-import posixpath
 import os
-from fabric.api import run, env, settings, cd, task, local, put
-from fabric.contrib.files import exists
-from fabric.operations import _prefix_commands, _prefix_env_vars
-
-env.hosts = ['pi@raspberrypi.local']
-env.code_dir = '/home/pi/thermostat'
-env.project_dir = '/home/pi/thermostat/thermostat'
-env.static_root = '/home/pi/thermostat/thermostat/static'
-env.virtualenv = '/home/pi/thermostat/.virtualenv'
-
-PYTHON_BIN = 'python3'
-PYTHON_PREFIX = "/usr/local"
-PYTHON_FULL_PATH = "{}/bin/{}".format(PYTHON_PREFIX, PYTHON_BIN)
+from fabric.api import *
 
 
-JAVASCRIPT_DIR = os.path.join(env.static_root, 'js')
-COFFEE_DIR = os.path.join(env.static_root, 'coffee')
-CSS_DIR = os.path.join(env.static_root, 'css')
-SASS_DIR = os.path.join(env.static_root, 'sass')
+
+def dev():
+  global requirements_file, config_file
+  print 'Configured for dev'
+  env.hosts = ["trover.local"]
+  env.user = "pi"
+  requirements_file = 'requirements/dev.txt'
+  config_file = 'dev.cfg'
+
+def test():
+  print 'Configured for test'
+  env.hosts = ["10.1.1.2"]
+  env.user = "glassfish"
+  requirements_file = 'requirements/prod.txt'
+  config_file = 'prod.cfg'
+
+def pack():
+  # build the package
+  local('python setup.py sdist --formats=gztar', capture=False)
+
+def install_reqs():
+  put(requirements_file, '/tmp/reqs.txt')
+
+  run('pip3 install -r /tmp/reqs.txt')
+
+  run('rm /tmp/reqs.txt')
+
+def install_config():
+  put(config_file, '/var/www/thermostat/configuration.cfg')
+
+  run('export APP_SETTINGS=/var/www/thermostat/configuration.cfg')
 
 
-def copy_over():
-	# local('rm ../thermostat.zip')
-	local('zip -r ../thermostat.zip .')
-	# run('rm /home/pi/thermostat.zip')
-	put('../thermostat.zip','/home/pi/thermostat.zip')
-	with cd('/home/pi'):
-		run('unzip -o thermostat.zip -d thermostat')
-
-@task
 def deploy():
-	copy_over()
+  # figure out the package name and version
+  dist = local('python setup.py --fullname', capture=True).strip()
+  filename = '%s.tar.gz' % dist
 
+  # upload the package to the temporary folder on the server
+  put('dist/%s' % filename, '/tmp/%s' % filename)
 
-# def virtualenv(venv_dir):
-#     """
-#     Context manager that establishes a virtualenv to use.
-#     """
-#     return settings(venv=venv_dir)
+  # install the package in the application's virtualenv with pip
+  run('pip3 install /tmp/%s' % filename)
 
+  # remove the uploaded package
+  # run('rm -r /tmp/%s' % filename)
 
-# def run_venv(command, **kwargs):
-#     """
-#     Runs a command in a virtualenv (which has been specified using
-#     the virtualenv context manager
-#     """
-#     run("source %s/bin/activate" % env.virtualenv + " && " + command, **kwargs)
-
-
-# def install_dependencies():
-#     ensure_virtualenv()
-#     with virtualenv(env.virtualenv):
-#         with cd(env.code_dir):
-#             run_venv("pip install -r requirements/prod.txt")
-
-
-# def ensure_virtualenv():
-#     if exists(env.virtualenv):
-#         return
-
-#     with cd(env.code_dir):
-#         run("virtualenv --no-site-packages --python=%s %s" %
-#             (PYTHON_BIN, env.virtualenv))
-#         run("echo %s > %s/lib/%s/site-packages/projectsource.pth" %
-#             (env.project_dir, env.virtualenv, PYTHON_BIN))
-
-
-# def ensure_src_dir():
-#     if not exists(env.code_dir):
-#         run("mkdir -p %s" % env.code_dir)
-#     with cd(env.code_dir):
-#         if not exists(posixpath.join(env.code_dir, '.git')):
-#             run('git clone %s .' % (env.code_repo))
-
-
-# def push_sources():
-#     """
-#     Push source code to server
-#     """
-#     ensure_src_dir()
-#     local('git push origin master')
-#     with cd(env.code_dir):
-#         run('git pull origin master')
-
-
-# @task
-# def version():
-#     """ Show last commit to the deployed repo. """
-#     with cd(env.code_dir):
-#         run('git log -1')
-
-
-# @task
-# def uname():
-#     """ Prints information about the host. """
-#     run("uname -a")
-
-
-# @task
-# def webserver_stop():
-#     """
-#     Stop the webserver that is running the Django instance
-#     """
-#     run("service apache2 stop")
-
-
-# @task
-# def webserver_start():
-#     """
-#     Starts the webserver that is running the Django instance
-#     """
-#     run("service apache2 start")
-
-
-# @task
-# def webserver_restart():
-#     """
-#     Restarts the webserver that is running the Django instance
-#     """
-#     if DJANGO_SERVER_RESTART:
-#         with cd(env.code_dir):
-#             run("touch %s/wsgi.py" % env.project_dir)
-#     else:
-#         with settings(warn_only=True):
-#             webserver_stop()
-#         webserver_start()
-
-
-# def restart():
-#     """ Restart the wsgi process """
-#     with cd(env.code_dir):
-#         run("touch %s/thermostat/wsgi.py" % env.code_dir)
-
-
-
-# @task
-# def first_deployment_mode():
-#     """
-#     Use before first deployment to switch on fake south migrations.
-#     """
-#     env.initial_deploy = True
-
-
-# @task
-# def sshagent_run(cmd):
-#     """
-#     Helper function.
-#     Runs a command with SSH agent forwarding enabled.
-#     Note:: Fabric (and paramiko) can't forward your SSH agent.
-#     This helper uses your system's ssh to do so.
-#     """
-#     # Handle context manager modifications
-#     wrapped_cmd = _prefix_commands(_prefix_env_vars(cmd), 'remote')
-#     try:
-#         host, port = env.host_string.split(':')
-#         return local(
-#             "ssh -p %s -A %s@%s '%s'" % (port, env.user, host, wrapped_cmd)
-#         )
-#     except ValueError:
-#         return local(
-#             "ssh -A %s@%s '%s'" % (env.user, env.host_string, wrapped_cmd)
-#         )
-
-# @task
-# def deploy():
-#     """
-#     Deploy the project.
-#     """
-#     with settings(warn_only=True):
-#         webserver_stop()
-#     push_sources()
-#     install_dependencies()
-#     webserver_start()
-
-# @task
-# def coffee(watch=1):
-#     '''
-#     Compiles Coffeescript files.
-#     Enters watch mode by default when you run:
-#         >> fab coffee
-#     To do a one-time compile, run:
-#         >> fab coffee:watch=0
-#     '''
-
-#     base_command = 'coffee -o {} '.format(JAVASCRIPT_DIR)
-#     coffee_files = "{}/*.coffee".format(COFFEE_DIR)
-#     if watch == 1:
-#         print "Watching .coffee files in {} to {}".format(COFFEE_DIR, JAVASCRIPT_DIR)
-#         command = base_command + '-cw ' + coffee_files
-#     else:
-#         print "Compiling .coffee files in {} and compiling them to {}".format(COFFEE_DIR, JAVASCRIPT_DIR)
-#         command = base_command + '-c ' + coffee_files
-#     local(command)
-
-# @task
-# def watchmedo():
-#     """
-#     Watches the file system for changes of ``*.py`` files and executes the tests
-#     whenever you save a file.
-#     """
-#     cmd = 'watchmedo shell-command --recursive --ignore-directories --patterns="*.py" --wait --command="fab test:unit=1,webtest=1" .'
-#     local(cmd)
-
-# @task
-# def test(unit=1, webtest=1):
-#     """
-#     Runs the tests.
-#     """
-#     command = 'nosetests --verbosity=2'
-#     if all == 0:
-#         if int(unit) == 0:
-#             command += " --exclude='unit_tests' "
-#         if int(webtest) == 0:
-#             command += " --exclude='webtest_tests' "
-#     local(command)
+  put('thermostat.wsgi', '/var/www/thermostat/thermostat.wsgi')

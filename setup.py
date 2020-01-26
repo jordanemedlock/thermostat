@@ -13,10 +13,14 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/jordanemedlock/thermostat",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.5',
+    package_data={
+        "": ["*.html", "*.js", "*.css"]
+    }
 )

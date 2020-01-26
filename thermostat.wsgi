@@ -1,7 +1,7 @@
 import os
 
 
-os.environ['APP_SETTINGS'] = 'debug.cfg'
+os.environ['APP_SETTINGS'] = '/var/www/thermostat/configuration.cfg'
 
 
 from thermostat import create_app
