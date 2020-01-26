@@ -1,3 +1,5 @@
+const tempDelta = 2;
+
 $(function() {
   loadAll();
 
@@ -7,16 +9,44 @@ $(function() {
       setMode(mode);
       displayMode(mode);
   });
+
+  $('.left-temp-control .plus-btn').click(function() {
+    window.temps[0] += 1;
+    window.temps[1] = window.temps[0] + tempDelta;
+    setTemps(window.temps);
+    displayTemps();
+  });
+
+  $('.left-temp-control .minus-btn').click(function() {
+    window.temps[0] -= 1;
+    window.temps[1] = window.temps[0] + tempDelta;
+    setTemps(window.temps);
+    displayTemps();
+  });
+
+  $('.right-temp-control .plus-btn').click(function() {
+    window.temps[3] += 1;
+    window.temps[2] = window.temps[3] + tempDelta;
+    setTemps(window.temps);
+    displayTemps();
+  });
+
+  $('.right-temp-control .minus-btn').click(function() {
+    window.temps[3] -= 1;
+    window.temps[2] = window.temps[3] + tempDelta;
+    setTemps(window.temps);
+    displayTemps();
+  });
 });
 
 
 interface Window { temps: Array<number>; }
 
 enum Mode {
-  off,
-  auto,
-  heater,
-  cooler
+  off = 'off',
+  auto = 'auto',
+  heater = 'heater',
+  cooler = 'cooler'
 }
 
 function loadAll() {
@@ -28,7 +58,7 @@ function loadAll() {
 function getSync(path: string): string {
   var ret: string = '';
   $.ajax({
-    url: 'http://localhost:5000' + path,
+    url: path,
     async: false,
     success: function(result) {
       ret = result;
@@ -37,8 +67,8 @@ function getSync(path: string): string {
   return ret;
 }
 
-function getTemperature(): number {
-  return parseInt(getSync('/temperature'));
+function getTemperature(): string {
+  return (getSync('/temperature'));
 }
 
 function getTemps(): Array<number> {
@@ -79,7 +109,8 @@ function loadTemps() {
 }
 
 function displayTemps() {
-  $('#left-temp-value').html(window.temps[0] + '&deg;F');
-  $('#right-temp-value').html(window.temps[3] + '&deg;F');
+  $('#left-temp-value').html(window.temps[0] + '&deg;');
+  $('#right-temp-value').html(window.temps[3] + '&deg;');
 }
+
 

@@ -1,3 +1,4 @@
+var tempDelta = 2;
 $(function () {
     loadAll();
     $(".mode-btn").click(function () {
@@ -6,13 +7,37 @@ $(function () {
         setMode(mode);
         displayMode(mode);
     });
+    $('.left-temp-control .plus-btn').click(function () {
+        window.temps[0] += 1;
+        window.temps[1] = window.temps[0] + tempDelta;
+        setTemps(window.temps);
+        displayTemps();
+    });
+    $('.left-temp-control .minus-btn').click(function () {
+        window.temps[0] -= 1;
+        window.temps[1] = window.temps[0] + tempDelta;
+        setTemps(window.temps);
+        displayTemps();
+    });
+    $('.right-temp-control .plus-btn').click(function () {
+        window.temps[3] += 1;
+        window.temps[2] = window.temps[3] + tempDelta;
+        setTemps(window.temps);
+        displayTemps();
+    });
+    $('.right-temp-control .minus-btn').click(function () {
+        window.temps[3] -= 1;
+        window.temps[2] = window.temps[3] + tempDelta;
+        setTemps(window.temps);
+        displayTemps();
+    });
 });
 var Mode;
 (function (Mode) {
-    Mode[Mode["off"] = 0] = "off";
-    Mode[Mode["auto"] = 1] = "auto";
-    Mode[Mode["heater"] = 2] = "heater";
-    Mode[Mode["cooler"] = 3] = "cooler";
+    Mode["off"] = "off";
+    Mode["auto"] = "auto";
+    Mode["heater"] = "heater";
+    Mode["cooler"] = "cooler";
 })(Mode || (Mode = {}));
 function loadAll() {
     loadTemperature();
@@ -22,7 +47,7 @@ function loadAll() {
 function getSync(path) {
     var ret = '';
     $.ajax({
-        url: 'http://localhost:5000' + path,
+        url: path,
         async: false,
         success: function (result) {
             ret = result;
@@ -31,7 +56,7 @@ function getSync(path) {
     return ret;
 }
 function getTemperature() {
-    return parseInt(getSync('/temperature'));
+    return (getSync('/temperature'));
 }
 function getTemps() {
     return getSync('/temps').split(' ').map(function (x) { return parseInt(x); });
@@ -62,6 +87,6 @@ function loadTemps() {
     displayTemps();
 }
 function displayTemps() {
-    $('#left-temp-value').html(window.temps[0] + '&deg;F');
-    $('#right-temp-value').html(window.temps[3] + '&deg;F');
+    $('#left-temp-value').html(window.temps[0] + '&deg;');
+    $('#right-temp-value').html(window.temps[3] + '&deg;');
 }
