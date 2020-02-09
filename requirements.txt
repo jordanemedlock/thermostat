@@ -1,0 +1,4 @@
+flask
+apscheduler
+RPi.GPIO
+git+git://github.com/jordanemedlock/iotgpio.git#egg=iotgpio

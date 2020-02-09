@@ -1,0 +1,2 @@
+recursive-include thermostat/templates *
+recursive-include thermostat/static *
