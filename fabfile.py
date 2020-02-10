@@ -55,6 +55,7 @@ def install_config():
 
 def deploy():
   # figure out the package name and version
+  local('python setup.py sdist --formats=gztar')
   dist = local('python setup.py --fullname', capture=True).strip()
   filename = '%s.tar.gz' % dist
 
@@ -64,6 +65,10 @@ def deploy():
   # install the package in the application's virtualenv with pip
   run('pip3 install /tmp/%s' % filename)
 
+  run('rm /tmp/%s' % filename)
+
   put('apache/thermostat.wsgi', '/tmp/thermostat.wsgi')
 
   sudo('mv /tmp/thermostat.wsgi /var/www/thermostat/thermostat.wsgi')
+
+  sudo('apachectl restart')

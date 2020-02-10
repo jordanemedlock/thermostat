@@ -1,4 +1,4 @@
 flask
 apscheduler
-RPi.GPIO
+requests
 git+git://github.com/jordanemedlock/iotgpio.git#egg=iotgpio
