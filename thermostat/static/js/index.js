@@ -1,92 +1,78 @@
-var tempDelta = 2;
-$(function () {
-    loadAll();
-    $(".mode-btn").click(function () {
-        var id = $(this).attr('id');
-        var mode = Mode[id.substr(5)];
-        setMode(mode);
-        displayMode(mode);
-    });
-    $('.left-temp-control .plus-btn').click(function () {
-        window.temps[0] += 1;
-        window.temps[1] = window.temps[0] + tempDelta;
-        setTemps(window.temps);
-        displayTemps();
-    });
-    $('.left-temp-control .minus-btn').click(function () {
-        window.temps[0] -= 1;
-        window.temps[1] = window.temps[0] + tempDelta;
-        setTemps(window.temps);
-        displayTemps();
-    });
-    $('.right-temp-control .plus-btn').click(function () {
-        window.temps[3] += 1;
-        window.temps[2] = window.temps[3] + tempDelta;
-        setTemps(window.temps);
-        displayTemps();
-    });
-    $('.right-temp-control .minus-btn').click(function () {
-        window.temps[3] -= 1;
-        window.temps[2] = window.temps[3] + tempDelta;
-        setTemps(window.temps);
-        displayTemps();
-    });
+$(function() {
+  load_all();
+
+  $("#mode-group.btn-group > .btn").click(function(){
+      $(this).addClass("active").siblings().removeClass("active");
+      set_mode();   
+  });
+
+  $('.temp-control').change(function() {
+    set_temps();
+  })
 });
-var Mode;
-(function (Mode) {
-    Mode["off"] = "off";
-    Mode["auto"] = "auto";
-    Mode["heater"] = "heater";
-    Mode["cooler"] = "cooler";
-})(Mode || (Mode = {}));
-function loadAll() {
-    loadTemperature();
-    loadMode();
-    loadTemps();
+
+function load_all() {
+  load_temperature();
+  load_heater();
+  load_cooler();
+  load_mode();
+  load_temps();
 }
-function getSync(path) {
-    var ret = '';
-    $.ajax({
-        url: path,
-        async: false,
-        success: function (result) {
-            ret = result;
-        }
-    });
-    return ret;
+
+function load_temperature() {
+  $.get('/temperature')
+  .done(function(data) {
+    $('#temperature-display').text(data)
+  })
 }
-function getTemperature() {
-    return (getSync('/temperature'));
+
+
+function load_heater() {
+  $.get('/heater')
+  .done(function(data) {
+    $('#heater-display').text(data)
+  })
 }
-function getTemps() {
-    return getSync('/temps').split(' ').map(function (x) { return parseInt(x); });
+
+
+function load_cooler() {
+  $.get('/cooler')
+  .done(function(data) {
+    $('#cooler-display').text(data)
+  })
 }
-function getMode() {
-    return Mode[getSync('/mode')];
+
+function load_mode() {
+  $.get('/mode')
+  .done(function(data) {
+    $('[name=mode][value='+data+']').parent().addClass('active')
+  });
 }
-function setTemps(temps) {
-    var msg = temps.join(' ');
-    $.post('/temps', msg);
+
+function load_temps() {
+  $.get('/temps')
+  .done(function(data) {
+    var ts = data.split(' ');
+    $('[name=lowest]').val(ts[0]);
+    $('[name=lower]').val(ts[1]);
+    $('[name=upper]').val(ts[2]);
+    $('[name=uppest]').val(ts[3]);
+  })
 }
-function setMode(mode) {
-    $.post('/mode/' + mode);
+
+function set_mode() {
+  var mode = $('#mode-group > .active > input').val();
+  $.post('/mode/' + mode);
 }
-function loadTemperature() {
-    $('#temperature-text').html(getTemperature() + '&deg;F');
-}
-function loadMode() {
-    displayMode(getMode());
-}
-function displayMode(mode) {
-    var modeStr = Mode[mode];
-    $('.mode-btn').removeClass('active');
-    $('#mode-' + modeStr).addClass('active');
-}
-function loadTemps() {
-    window.temps = getTemps();
-    displayTemps();
-}
-function displayTemps() {
-    $('#left-temp-value').html(window.temps[0] + '&deg;');
-    $('#right-temp-value').html(window.temps[3] + '&deg;');
+
+function set_temps() {
+
+  var ts = []
+  ts.push($('[name=lowest]').val());
+  ts.push($('[name=lower]').val());
+  ts.push($('[name=upper]').val());
+  ts.push($('[name=uppest]').val());
+  var msg = ts.join(' ');
+  console.log(msg);
+  $.post('/temps', msg);
 }

@@ -3,6 +3,13 @@ import os
 import json
 from thermostat import views
 import apscheduler.schedulers.background as aps
+import logging
+
+logging.basicConfig(
+  filename='thermostat.log', 
+  level=logging.DEBUG,
+  format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s'
+)
 
 def create_app(test_config=None):
   app = Flask(__name__)
@@ -21,6 +28,7 @@ def create_app(test_config=None):
   app.register_blueprint(views.ui)
 
   if app.config.get('RUN_THERMOSTAT'):
-    views.activate_thermostat(scheduler, app.config)
+    with app.app_context():
+      views.activate_thermostat(app, scheduler, app.config)
 
   return app

@@ -62,7 +62,6 @@ db.sqlite3
 db.sqlite3-journal
 
 # Flask stuff:
-instance/
 .webassets-cache
 
 # Scrapy stuff:
@@ -235,3 +234,4 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+node_modules
