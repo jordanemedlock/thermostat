@@ -1,9 +1,217 @@
-#set-temp {
-  margin-left: auto;
-  margin-right: auto;
+@keyframes popout {
+  from {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  }
+  to {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  }
+}
+@-moz-keyframes popout {
+  from {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  }
+  to {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  }
+}
+@-webkit-keyframes popout {
+  from {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  }
+  to {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  }
+}
+@-o-keyframes popout {
+  from {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  }
+  to {
+    box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  }
+}
+body {
+  background: #EEE;
 }
 
-#temperature {
-  margin-left: auto;
-  margin-right: auto;
+#temperature-dial {
+  width: 300px;
+  height: 300px;
+  border-radius: 150px;
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  animation: popout 2s;
+  -moz-animation: popout 2s;
+  -webkit-animation: popout 2s;
+  -o-animation: popout 2s;
+  margin: auto;
+  margin-top: calc((100vw - 300px) / 2);
+  padding-top: 96px;
 }
+
+#temperature-text {
+  font-size: 72px;
+  background: -webkit-linear-gradient(#009dff, fuchsia);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  height: 108px;
+}
+
+.plus-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  animation: popout 2s;
+  -moz-animation: popout 2s;
+  -webkit-animation: popout 2s;
+  -o-animation: popout 2s;
+  padding: 10px;
+}
+.plus-btn img {
+  height: 40px;
+  width: 40px;
+}
+.plus-btn:active {
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  box-shadow: inset 0px 0px 4px 2px rgba(119, 119, 119, 0.4);
+  padding: 11px;
+}
+.plus-btn:active img {
+  height: 38px;
+  width: 38px;
+}
+
+.minus-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  animation: popout 2s;
+  -moz-animation: popout 2s;
+  -webkit-animation: popout 2s;
+  -o-animation: popout 2s;
+  padding: 10px;
+}
+.minus-btn img {
+  height: 40px;
+  width: 40px;
+}
+.minus-btn:active {
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  box-shadow: inset 0px 0px 4px 2px rgba(119, 119, 119, 0.4);
+  padding: 11px;
+}
+.minus-btn:active img {
+  height: 38px;
+  width: 38px;
+}
+
+.temp-control {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  animation: popout 2s;
+  -moz-animation: popout 2s;
+  -webkit-animation: popout 2s;
+  -o-animation: popout 2s;
+  padding: 20px;
+}
+.temp-control div {
+  width: 40px;
+  height: 40px;
+  font-size: 36px;
+  text-align: center;
+  line-height: 40px;
+}
+
+.left-temp-control {
+  width: 155px;
+  height: 135px;
+}
+.left-temp-control .plus-btn {
+  position: absolute;
+  top: 0px;
+  left: 15px;
+}
+.left-temp-control .minus-btn {
+  position: absolute;
+  top: 75px;
+  left: 15px;
+}
+.left-temp-control .temp-control {
+  position: absolute;
+  top: 27.5px;
+  left: 90px;
+}
+
+.right-temp-control {
+  width: 155px;
+  height: 135px;
+}
+.right-temp-control .plus-btn {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+}
+.right-temp-control .minus-btn {
+  position: absolute;
+  top: 75px;
+  right: 15px;
+}
+.right-temp-control .temp-control {
+  position: absolute;
+  top: 27.5px;
+  right: 90px;
+}
+
+.mode-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0.4), -5px -5px 8px 4px rgba(255, 255, 255, 0.4);
+  animation: popout 2s;
+  -moz-animation: popout 2s;
+  -webkit-animation: popout 2s;
+  -o-animation: popout 2s;
+  padding: 10px;
+  margin-top: 15px;
+}
+.mode-btn img {
+  height: 40px;
+  width: 40px;
+}
+.mode-btn:active {
+  box-shadow: 5px 5px 8px 4px rgba(119, 119, 119, 0), -5px -5px 8px 4px rgba(255, 255, 255, 0);
+  box-shadow: inset 0px 0px 4px 2px rgba(119, 119, 119, 0.4);
+  padding: 11px;
+}
+.mode-btn:active img {
+  height: 38px;
+  width: 38px;
+}
+
+.mode-btn.active {
+  box-shadow: inset 0px 0px 4px 2px rgba(119, 119, 119, 0.4);
+  padding: 11px;
+}
+.mode-btn.active img {
+  height: 38px;
+  width: 38px;
+}
+
+#mode-heater.active {
+  background-color: #F20;
+}
+
+#mode-cooler.active {
+  background-color: #0FF;
+}
+
+#mode-auto.active {
+  background: -webkit-linear-gradient(#009dff, fuchsia);
+}
+
+/*# sourceMappingURL=index.css.map */

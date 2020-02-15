@@ -21,6 +21,6 @@ setuptools.setup(
     ],
     python_requires='>=3.5',
     package_data={
-        "": ["*.html", "*.js", "*.css"]
+        "": ["*.html", "*.js", "*.css", "*.ts", "*.scss", "*.css.map"]
     }
 )
