@@ -1,12 +1,29 @@
-from iotgpio import *
+from iotgpio import Relay, DS18B20
 import time
 
 
 class Heater(Relay):
   pass
 
-class AC(Relay):
-  pass
+class AC:
+  def __init__(self, compressor_pin, high_pin, low_pin):
+    self.compressor = Relay(compressor_pin)
+    self.high = Relay(high_pin)
+    self.low = Relay(low_pin)
+  
+  def on(self, high=True):
+    self.low.off()
+    self.high.on()
+    self.compressor.on()
+  
+  def off(self):
+    self.low.off()
+    self.high.off()
+    self.compressor.off()
+  
+  @property
+  def is_on(self):
+    return self.compressor.is_on
 
 class MockHeater():
   def on(self):
@@ -21,7 +38,7 @@ class MockHeater():
   
 
 class MockCooler():
-  def on(self):
+  def on(self, high=True):
     pass
 
   def off(self):

@@ -1,5 +1,5 @@
 from flask import Blueprint, g, current_app, request, session
-from thermostat.models import *
+from thermostat.models import MockHeater, MockCooler, Thermometer, MockThermometer, AC, Heater
 import glob
 
 control = Blueprint('control', __name__)
@@ -12,7 +12,7 @@ def initialize_variables():
     g.thermometer = MockThermometer()
   else:
     g.heater = Heater(current_app.config.get('HEATER_PIN'))
-    g.cooler = AC(current_app.config.get('COOLER_PIN'))
+    g.cooler = AC(current_app.config.get('COMPRESSOR_PIN'), current_app.config.get('HIGH_PIN'), current_app.config.get('LOW_PIN'))
     g.thermometer = Thermometer()
 
 
@@ -26,6 +26,12 @@ def cooler_set(on_off):
     elif on_off.lower() == 'off':
       g.cooler.off()
       return 'off'
+    elif on_off.lower() == 'high':
+      g.cooler.on(True)
+      return 'high'
+    elif on_off.lower() == 'low':
+      g.cooler.off(False)
+      return 'low'
   else:
     return 'on' if g.cooler.is_on else 'off'
 
